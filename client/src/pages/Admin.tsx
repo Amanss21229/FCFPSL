@@ -108,8 +108,19 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   };
 
-  const sendWhatsapp = (number: string, name: string) => {
-    const text = `Hello ${name}, your registration for Sansa Learn Concept Foundation Program is confirmed.`;
+  const sendWhatsapp = (number: string, name: string, registrationId: number) => {
+    const baseUrl = window.location.origin;
+    const receiptUrl = `${baseUrl}/thank-you/${registrationId}`;
+    const text = `Hello ${name}, your registration for Sansa Learn Concept Foundation Program is confirmed!
+
+Registration ID: #${registrationId}
+Batch Duration: 2nd Feb - 15th Feb 2026
+Location: Chandmari Road, Kankarbagh Patna
+
+Download your Registration Receipt (PDF):
+${receiptUrl}
+
+Please report to the center on 2nd February at your batch time. Contact: 9296820840, 9153021229`;
     window.open(`https://wa.me/91${number}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -194,7 +205,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                         <td className="p-4 text-right">
                         <div className="flex justify-end gap-2">
                             <button 
-                            onClick={() => sendWhatsapp(reg.whatsappNumber, reg.studentName)}
+                            onClick={() => sendWhatsapp(reg.whatsappNumber, reg.studentName, reg.id)}
                             className="p-2 bg-green-500 text-white border border-black hover:scale-105 transition-transform"
                             title="Message on WhatsApp"
                             >
