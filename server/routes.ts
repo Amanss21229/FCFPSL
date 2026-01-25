@@ -45,7 +45,12 @@ export async function registerRoutes(
     
     if (password === adminPassword) {
       req.session.isAuthenticated = true;
-      res.json({ success: true });
+      req.session.save((err) => {
+        if (err) {
+          return res.status(500).json({ message: "Session save failed" });
+        }
+        res.json({ success: true });
+      });
     } else {
       res.status(401).json({ message: "Invalid password" });
     }
