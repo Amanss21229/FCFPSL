@@ -28,6 +28,14 @@ export const api = {
         400: errorSchemas.validation,
       },
     },
+    get: {
+      method: 'GET' as const,
+      path: '/api/registrations/:id',
+      responses: {
+        200: z.custom<typeof registrations.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
     list: {
       method: 'GET' as const,
       path: '/api/registrations',

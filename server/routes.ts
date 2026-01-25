@@ -91,6 +91,21 @@ export async function registerRoutes(
     }
   });
 
+  // Public route to get a single registration by ID (for receipt download)
+  app.get('/api/registrations/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+    
+    const registration = await storage.getRegistration(id);
+    if (!registration) {
+      return res.status(404).json({ message: "Registration not found" });
+    }
+    
+    res.json(registration);
+  });
+
   // Protected Admin Routes
   app.get(api.registrations.list.path, requireAuth, async (req, res) => {
     const registrations = await storage.getRegistrations();
