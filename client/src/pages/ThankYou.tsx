@@ -43,69 +43,140 @@ export default function ThankYou() {
 
   const generatePDF = () => {
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const center = pageWidth / 2;
 
-    // Header
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text("SANSA LEARN", 105, 20, { align: "center" });
+    const addBranding = (pageNum: number) => {
+      // Top Left Logo Placeholder (using text as fallback if logo not loading)
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("SANSA LEARN", 15, 15);
+      
+      // Top Center Header
+      doc.setFontSize(12);
+      doc.text("FREE CONCEPT FOUNDATION PROGRAM", center, 15, { align: "center" });
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 100, 100);
+      const footerText = "Chandmari Road, Kankarbagh Patna, (opposite of Gali no. 06) | Contact: 9296820840, 9153021229";
+      doc.text(footerText, center, pageHeight - 10, { align: "center" });
+      doc.text(`Page ${pageNum}`, pageWidth - 15, pageHeight - 10, { align: "right" });
+    };
+
+    // --- PAGE 1: Success & General Info ---
+    addBranding(1);
     
+    doc.setFontSize(24);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("REGISTRATION SUCCESSFUL!", center, 40, { align: "center" });
+
+    doc.setFontSize(14);
+    doc.text(`Welcome, ${registration?.studentName || "Student"}!`, 20, 60);
+
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text("Concept Foundation Program Registration Receipt", 105, 30, { align: "center" });
+    const introText = "Congratulations on securing your seat in the Sansa Learn Concept Foundation Program. This 15-day intensive program is designed to strengthen your academic foundations in Mathematics, Science, and English Grammar.";
+    doc.text(doc.splitTextToSize(introText, 170), 20, 70);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Program Information:", 20, 95);
     
-    doc.setLineWidth(0.5);
-    doc.line(20, 35, 190, 35);
+    autoTable(doc, {
+      startY: 100,
+      body: [
+        ["Registration ID", `#${registration?.id || "N/A"}`],
+        ["Student Name", registration?.studentName || "N/A"],
+        ["Batch Duration", "15 Days (2nd Feb - 15th Feb 2026)"],
+        ["Class Start Date", "2nd February 2026"],
+        ["Location", "Chandmari Road, Kankarbagh Patna"],
+      ],
+      theme: 'grid',
+      styles: { fontSize: 11, cellPadding: 5 },
+      columnStyles: { 0: { fontStyle: 'bold', width: 50 } }
+    });
 
-    // Student Details Table
-    if (registration) {
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "bold");
-      doc.text("Student Details", 20, 50);
-
-      autoTable(doc, {
-        startY: 55,
-        head: [['Field', 'Value']],
-        body: [
-          ['Registration ID', `#${registration.id}`],
-          ['Student Name', registration.studentName],
-          ['Class', registration.grade],
-          ['Father\'s Name', registration.fatherName],
-          ['WhatsApp', registration.whatsappNumber],
-          ['Date', format(new Date(registration.createdAt!), "PPP")],
-        ],
-        theme: 'plain',
-        styles: { lineColor: [0, 0, 0], lineWidth: 0.1, textColor: [0, 0, 0] },
-        headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' }
-      });
-    }
-
-    // Batch Details
-    if (studentRoutine) {
-      const finalY = (doc as any).lastAutoTable.finalY + 15;
-      
-      doc.setFontSize(14);
-      doc.text("Batch Schedule", 20, finalY);
-
-      autoTable(doc, {
-        startY: finalY + 5,
-        body: [
-          ['Assigned Batch', studentRoutine.class],
-          ['Timing', studentRoutine.time],
-          ['Subjects', studentRoutine.subjects],
-          ['Venue', 'Sansa Learning Center, Galaxy Tower'],
-        ],
-        theme: 'grid',
-        styles: { lineColor: [0, 0, 0], lineWidth: 0.1, textColor: [0, 0, 0] },
-      });
-    }
-
-    // Footer
-    const pageHeight = doc.internal.pageSize.height;
     doc.setFontSize(10);
-    doc.text("Please bring this receipt or a screenshot on the first day.", 105, pageHeight - 30, { align: "center" });
-    doc.text("Helpline: +91 98765 43210", 105, pageHeight - 20, { align: "center" });
+    doc.setFont("helvetica", "italic");
+    const noteText = "Important: Please arrive 15 minutes before your scheduled batch time on the first day. Bring this receipt and one passport size photograph.";
+    doc.text(doc.splitTextToSize(noteText, 170), 20, (doc as any).lastAutoTable.finalY + 15);
 
-    doc.save(`Sansa-Registration-${registration?.studentName || "Receipt"}.pdf`);
+    // --- PAGE 2: Complete Data (Registration Copy) ---
+    doc.addPage();
+    addBranding(2);
+
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("REGISTRATION FORM COPY", center, 35, { align: "center" });
+
+    if (registration) {
+      autoTable(doc, {
+        startY: 45,
+        head: [['Field', 'Information']],
+        body: [
+          ['Student Name', registration.studentName],
+          ['Gender', registration.gender],
+          ['Class (2025-26)', registration.grade],
+          ['Father\'s Name', registration.fatherName],
+          ['Mother\'s Name', registration.motherName],
+          ['WhatsApp Number', registration.whatsappNumber],
+          ['Parent Mobile', registration.parentMobileNumber],
+          ['Alternate Number', registration.alternateNumber || "N/A"],
+          ['Full Address', registration.address],
+          ['Registration Date', format(new Date(registration.createdAt!), "PPP")],
+        ],
+        theme: 'striped',
+        headStyles: { fillColor: [0, 0, 0] },
+        styles: { fontSize: 10, cellPadding: 4 }
+      });
+    }
+
+    // --- PAGE 3: Routine & Timing ---
+    doc.addPage();
+    addBranding(3);
+
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("CLASS ROUTINE & TIMING", center, 35, { align: "center" });
+
+    if (studentRoutine) {
+      doc.setFontSize(14);
+      doc.text(`Assigned Batch: ${studentRoutine.class}`, 20, 50);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Daily Timing: ${studentRoutine.time}`, 20, 60);
+
+      autoTable(doc, {
+        startY: 70,
+        head: [['Class', 'Time', 'Subjects', 'Weekly Schedule']],
+        body: [[
+          studentRoutine.class,
+          studentRoutine.time,
+          studentRoutine.subjects,
+          studentRoutine.days
+        ]],
+        theme: 'grid',
+        headStyles: { fillColor: [43, 96, 56] } // Golden-ish header
+      });
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("Complete Program Schedule (All Batches):", 20, (doc as any).lastAutoTable.finalY + 15);
+
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 20,
+        head: [['Class', 'Time', 'Subjects']],
+        body: ROUTINE_DATA.map(r => [r.class, r.time, r.subjects]),
+        theme: 'striped',
+        styles: { fontSize: 8 }
+      });
+    }
+
+    doc.save(`Sansa-Receipt-${registration?.studentName || "Student"}.pdf`);
   };
 
   return (
