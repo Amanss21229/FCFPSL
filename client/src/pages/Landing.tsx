@@ -3,17 +3,21 @@ import { BrutalButton } from "@/components/BrutalButton";
 import { Link } from "wouter";
 import { ArrowRight, BookOpen, Star, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
+import logo from "@assets/file_00000000fc9c71f4959f7efd35bf788d_1769314870949.png";
 
 export default function Landing() {
+  const { t } = useLanguage();
+
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden border-b-4 border-black">
+      <section className="relative py-16 md:py-28 overflow-hidden border-b-2 border-golden">
         {/* Abstract background pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" 
              style={{ 
-               backgroundImage: "radial-gradient(circle, #000 1px, transparent 1px)", 
-               backgroundSize: "20px 20px" 
+               backgroundImage: "radial-gradient(circle, hsl(43 96% 56%) 1px, transparent 1px)", 
+               backgroundSize: "30px 30px" 
              }}>
         </div>
 
@@ -23,29 +27,44 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block bg-black text-white px-4 py-1 font-mono font-bold text-sm mb-6 uppercase tracking-widest transform -rotate-2">
-              Limited Seats Available
+            <span className="inline-block bg-golden text-black px-4 py-1 font-mono font-bold text-sm mb-6 uppercase tracking-widest transform -rotate-2">
+              {t("hero.badge")}
             </span>
-            <h1 className="text-5xl md:text-8xl font-black mb-2 uppercase tracking-tight leading-none">
-              Free Concept
-            </h1>
-            <h1 className="text-5xl md:text-8xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-b from-neutral-800 to-black uppercase tracking-tight leading-none" style={{ WebkitTextStroke: "2px black" }}>
-              Foundation Program
-            </h1>
             
-            <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-12 font-mono text-neutral-600">
-              A 15-day intensive boot camp designed to solidify your core concepts in Physics, Chemistry, and Mathematics.
+            <h1 className="text-4xl md:text-7xl font-black mb-2 uppercase tracking-tight leading-none">
+              {t("hero.title1")}
+            </h1>
+            <h1 className="text-4xl md:text-7xl font-black mb-8 text-golden uppercase tracking-tight leading-none">
+              {t("hero.title2")}
+            </h1>
+
+            {/* 3D Logo Display */}
+            <motion.div 
+              className="my-10 flex justify-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <img 
+                src={logo} 
+                alt="Sansa Learn Logo" 
+                className="logo-3d w-40 h-40 md:w-56 md:h-56 object-contain"
+              />
+            </motion.div>
+            
+            <p className="text-lg md:text-xl font-medium max-w-2xl mx-auto mb-12 font-mono text-muted-foreground">
+              {t("hero.subtitle")}
             </p>
 
             <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
               <Link href="/program">
-                <BrutalButton size="lg" className="w-full md:w-auto min-w-[200px]">
-                  What is this? <BookOpen className="ml-2 w-5 h-5" />
+                <BrutalButton size="lg" className="w-full md:w-auto min-w-[280px]">
+                  {t("hero.whatIs")} <BookOpen className="ml-2 w-5 h-5" />
                 </BrutalButton>
               </Link>
               <Link href="/register">
-                <BrutalButton variant="primary" size="lg" className="w-full md:w-auto min-w-[200px]">
-                  Register Free <ArrowRight className="ml-2 w-5 h-5" />
+                <BrutalButton variant="primary" size="lg" className="w-full md:w-auto min-w-[280px]">
+                  {t("hero.register")} <ArrowRight className="ml-2 w-5 h-5" />
                 </BrutalButton>
               </Link>
             </div>
@@ -54,38 +73,38 @@ export default function Landing() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-neutral-50">
+      <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard 
               icon={<Zap className="w-8 h-8" />}
-              title="Concept Clarity"
-              desc="Focus on understanding 'Why' and 'How' rather than rote memorization."
+              title={t("features.concept.title")}
+              desc={t("features.concept.desc")}
             />
             <FeatureCard 
               icon={<Star className="w-8 h-8" />}
-              title="Expert Mentors"
-              desc="Learn from experienced educators who specialize in competitive exams."
+              title={t("features.mentor.title")}
+              desc={t("features.mentor.desc")}
             />
             <FeatureCard 
               icon={<BookOpen className="w-8 h-8" />}
-              title="Study Material"
-              desc="Get comprehensive notes and problem sets completely free of cost."
+              title={t("features.material.title")}
+              desc={t("features.material.desc")}
             />
           </div>
         </div>
       </section>
       
       {/* Call to Action */}
-      <section className="py-24 border-t-4 border-black bg-black text-white">
+      <section className="py-24 border-t-2 border-golden bg-black text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase">Start Your Journey Today</h2>
-          <p className="text-xl font-mono mb-12 max-w-2xl mx-auto opacity-80">
-            Don't let weak basics hold you back. Join the foundation program and build a career-ready mindset.
+          <h2 className="text-3xl md:text-5xl font-black mb-8 uppercase text-golden">{t("cta.title")}</h2>
+          <p className="text-lg font-mono mb-12 max-w-2xl mx-auto opacity-80">
+            {t("cta.subtitle")}
           </p>
           <Link href="/register">
-            <button className="bg-white text-black px-12 py-5 text-xl font-black uppercase hover:scale-105 transition-transform shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)]">
-              Secure Your Spot Now
+            <button className="btn-3d-primary px-12 py-5 text-xl font-black uppercase">
+              {t("cta.button")}
             </button>
           </Link>
         </div>
@@ -100,11 +119,11 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
       whileHover={{ y: -5 }}
       className="card-brutal flex flex-col items-start h-full"
     >
-      <div className="bg-black text-white p-3 mb-6">
+      <div className="bg-golden text-black p-3 mb-6">
         {icon}
       </div>
-      <h3 className="text-2xl font-bold mb-3 uppercase">{title}</h3>
-      <p className="font-mono text-neutral-600 leading-relaxed">{desc}</p>
+      <h3 className="text-xl font-bold mb-3 uppercase">{title}</h3>
+      <p className="font-mono text-muted-foreground leading-relaxed">{desc}</p>
     </motion.div>
   );
 }

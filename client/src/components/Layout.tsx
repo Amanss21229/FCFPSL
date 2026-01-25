@@ -1,64 +1,103 @@
 import logo from "@assets/file_00000000fc9c71f4959f7efd35bf788d_1769314870949.png";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun, Languages } from "lucide-react";
 import { useState } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isAdmin = location.startsWith("/admin");
+  const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
 
   return (
-    <div className="min-h-screen flex flex-col font-body bg-white text-black selection:bg-black selection:text-white">
+    <div className="min-h-screen flex flex-col font-body bg-background text-foreground">
       {/* Header */}
-      <header className="border-b-4 border-black sticky top-0 z-50 bg-white">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="border-b-2 border-golden sticky top-0 z-50 bg-background">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">
           {/* Logo Area */}
-          <Link href="/" className="flex items-center gap-4 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <img 
               src={logo} 
               alt="Sansa Learn Logo" 
-              className="h-12 w-12 md:h-16 md:w-16 object-contain border-2 border-transparent group-hover:border-black p-1 transition-all rounded-full"
+              className="h-10 w-10 md:h-14 md:w-14 object-contain"
             />
             <div className="flex flex-col">
-              <span className="font-display font-black text-xl md:text-3xl leading-none tracking-tighter uppercase">Sansa Learn</span>
-              <span className="font-mono text-xs md:text-sm font-bold tracking-widest text-neutral-500 uppercase">Concept Foundation</span>
+              <span className="font-display font-black text-lg md:text-2xl leading-none tracking-tighter uppercase text-golden">Sansa Learn</span>
+              <span className="font-mono text-xs font-bold tracking-widest text-muted-foreground uppercase">Concept Foundation</span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             {!isAdmin ? (
               <>
-                <Link href="/" className={cn("text-lg font-bold uppercase hover:underline decoration-4 underline-offset-4", location === "/" && "underline")}>Home</Link>
-                <Link href="/program" className={cn("text-lg font-bold uppercase hover:underline decoration-4 underline-offset-4", location === "/program" && "underline")}>Program</Link>
+                <Link href="/" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/" && "text-golden")}>
+                  {t("nav.home")}
+                </Link>
+                <Link href="/program" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/program" && "text-golden")}>
+                  {t("nav.program")}
+                </Link>
                 <Link href="/register">
-                  <span className="bg-black text-white px-6 py-2 font-bold uppercase border-2 border-black hover:bg-white hover:text-black transition-colors">
-                    Register Now
+                  <span className="btn-3d-primary px-5 py-2 uppercase text-sm">
+                    {t("nav.register")}
                   </span>
                 </Link>
               </>
             ) : (
-              <span className="font-mono text-sm bg-neutral-100 px-3 py-1 border border-black">ADMIN MODE</span>
+              <span className="font-mono text-sm bg-secondary px-3 py-1 border border-golden">ADMIN MODE</span>
             )}
           </nav>
 
-          {/* Mobile Menu Toggle */}
-          <button 
-            className="md:hidden p-2 border-2 border-black"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Right Side Icons */}
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 border-2 border-golden hover:bg-golden hover:text-black transition-colors"
+              data-testid="button-theme-toggle"
+              title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {theme === "light" ? <Moon size={20} /> : <Sun size={20} className="text-golden" />}
+            </button>
+
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className="p-2 border-2 border-golden hover:bg-golden hover:text-black transition-colors flex items-center gap-1"
+              data-testid="button-language-toggle"
+              title={language === "en" ? "Switch to Hindi" : "Switch to English"}
+            >
+              <Languages size={20} />
+              <span className="font-mono text-xs font-bold">{language.toUpperCase()}</span>
+            </button>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="md:hidden p-2 border-2 border-golden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              data-testid="button-mobile-menu"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Nav Menu */}
         {mobileMenuOpen && !isAdmin && (
-          <div className="md:hidden border-t-2 border-black bg-neutral-50 p-4 flex flex-col gap-4">
-             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 border-b border-neutral-300">Home</Link>
-             <Link href="/program" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 border-b border-neutral-300">Program Details</Link>
-             <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 bg-black text-white text-center">Register Now</Link>
+          <div className="md:hidden border-t-2 border-golden bg-secondary p-4 flex flex-col gap-4">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 border-b border-border">
+              {t("nav.home")}
+            </Link>
+            <Link href="/program" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 border-b border-border">
+              {t("nav.program")}
+            </Link>
+            <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold uppercase py-2 btn-3d-primary text-center">
+              {t("nav.register")}
+            </Link>
           </div>
         )}
       </header>
@@ -69,31 +108,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t-4 border-black bg-neutral-100 py-12 mt-12">
+      <footer className="border-t-2 border-golden bg-secondary py-12 mt-12">
         <div className="container mx-auto px-4 text-center">
           <div className="grid md:grid-cols-3 gap-8 mb-8 text-left">
             <div>
-              <h4 className="text-xl font-black mb-4 uppercase">Sansa Learn</h4>
-              <p className="font-mono text-sm leading-relaxed">
-                Empowering students with strong conceptual foundations for a brighter academic future.
+              <h4 className="text-xl font-black mb-4 uppercase text-golden">Sansa Learn</h4>
+              <p className="font-mono text-sm leading-relaxed text-muted-foreground">
+                {t("footer.tagline")}
               </p>
             </div>
             <div>
-              <h4 className="text-xl font-black mb-4 uppercase">Contact</h4>
-              <p className="font-mono text-sm">
-                Near City Center<br/>
-                Main Road, District<br/>
-                +91 98765 43210
+              <h4 className="text-xl font-black mb-4 uppercase text-golden">{t("footer.contact")}</h4>
+              <p className="font-mono text-sm text-muted-foreground">
+                Chandmari Road, Kankarbagh<br/>
+                Patna (Opposite Gali No. 06)<br/>
+                9296820840 | 9153021229
               </p>
             </div>
             <div>
-              <h4 className="text-xl font-black mb-4 uppercase">Admin</h4>
-              <Link href="/admin" className="text-sm font-bold underline decoration-2 underline-offset-4 hover:bg-black hover:text-white inline-block p-1">
+              <h4 className="text-xl font-black mb-4 uppercase text-golden">{t("footer.admin")}</h4>
+              <Link href="/admin" className="text-sm font-bold text-golden underline decoration-2 underline-offset-4 hover:opacity-80 inline-block p-1">
                 Admin Login
               </Link>
             </div>
           </div>
-          <div className="border-t-2 border-neutral-300 pt-8 font-mono text-xs text-neutral-500">
+          <div className="border-t-2 border-border pt-8 font-mono text-xs text-muted-foreground">
             © {new Date().getFullYear()} SANSA LEARN. ALL RIGHTS RESERVED.
           </div>
         </div>

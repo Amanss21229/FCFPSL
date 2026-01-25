@@ -9,35 +9,113 @@
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Black & White High Contrast Palette */
+  /* Light Mode: Black & Golden Theme */
   --background: 0 0% 100%;
-  --foreground: 0 0% 0%;
+  --foreground: 0 0% 5%;
   
-  --primary: 0 0% 0%;
-  --primary-foreground: 0 0% 100%;
+  --primary: 43 96% 56%;
+  --primary-foreground: 0 0% 0%;
   
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 0 0% 0%;
+  --secondary: 43 30% 90%;
+  --secondary-foreground: 0 0% 10%;
   
-  --muted: 0 0% 96%;
+  --muted: 43 20% 94%;
   --muted-foreground: 0 0% 40%;
   
-  --accent: 0 0% 90%;
+  --accent: 43 80% 50%;
   --accent-foreground: 0 0% 0%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 0 0% 0%;
-  --input: 0 0% 0%;
-  --ring: 0 0% 0%;
+  --border: 43 50% 30%;
+  --input: 43 50% 30%;
+  --ring: 43 96% 56%;
   
-  --radius: 0px; /* Sharp corners for brutalist feel */
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 5%;
+  --card-border: 43 50% 30%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  --popover-border: 43 50% 30%;
+  
+  --sidebar: 0 0% 5%;
+  --sidebar-foreground: 43 50% 80%;
+  --sidebar-border: 43 50% 20%;
+  --sidebar-primary: 43 96% 56%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 43 50% 20%;
+  --sidebar-accent-foreground: 43 50% 90%;
+  --sidebar-ring: 43 96% 56%;
+  
+  --chart-1: 43 96% 56%;
+  --chart-2: 43 70% 45%;
+  --chart-3: 43 50% 35%;
+  --chart-4: 43 30% 25%;
+  --chart-5: 43 10% 15%;
+
+  --golden: 43 96% 56%;
+  --golden-dark: 43 80% 40%;
+  --golden-light: 43 80% 75%;
+  
+  --radius: 0px;
+}
+
+.dark {
+  --background: 0 0% 5%;
+  --foreground: 43 30% 90%;
+  
+  --primary: 43 96% 56%;
+  --primary-foreground: 0 0% 0%;
+  
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 43 30% 90%;
+  
+  --muted: 0 0% 15%;
+  --muted-foreground: 43 20% 60%;
+  
+  --accent: 43 80% 50%;
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 62% 50%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 43 40% 25%;
+  --input: 43 40% 25%;
+  --ring: 43 96% 56%;
+  
+  --card: 0 0% 8%;
+  --card-foreground: 43 30% 90%;
+  --card-border: 43 40% 25%;
+  
+  --popover: 0 0% 8%;
+  --popover-foreground: 43 30% 90%;
+  --popover-border: 43 40% 25%;
+  
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 43 50% 80%;
+  --sidebar-border: 43 50% 15%;
+  --sidebar-primary: 43 96% 56%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 43 50% 15%;
+  --sidebar-accent-foreground: 43 50% 90%;
+  --sidebar-ring: 43 96% 56%;
+  
+  --chart-1: 43 96% 56%;
+  --chart-2: 43 70% 50%;
+  --chart-3: 43 50% 40%;
+  --chart-4: 43 30% 30%;
+  --chart-5: 43 10% 20%;
+
+  --golden: 43 96% 56%;
+  --golden-dark: 43 80% 40%;
+  --golden-light: 43 80% 70%;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-black selection:text-white;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
   }
 
@@ -48,36 +126,78 @@
 }
 
 @layer utilities {
+  .text-golden {
+    color: hsl(43 96% 56%);
+  }
+  
+  .bg-golden {
+    background-color: hsl(43 96% 56%);
+  }
+  
+  .border-golden {
+    border-color: hsl(43 96% 56%);
+  }
+  
+  .shadow-golden {
+    box-shadow: 0 0 20px hsl(43 96% 56% / 0.3);
+  }
+
   .btn-3d {
-    @apply relative border-2 border-black bg-white text-black font-bold transition-transform hover:-translate-y-1 hover:-translate-x-1;
-    box-shadow: 4px 4px 0px 0px #000;
+    @apply relative font-bold transition-transform hover:-translate-y-1 hover:-translate-x-1;
+    border: 2px solid hsl(43 96% 56%);
+    background: transparent;
+    color: hsl(var(--foreground));
+    box-shadow: 4px 4px 0px 0px hsl(43 96% 56%);
   }
 
   .btn-3d:active {
     @apply translate-x-0 translate-y-0;
-    box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px hsl(43 96% 56%);
   }
   
   .btn-3d-primary {
-    @apply relative border-2 border-black bg-black text-white font-bold transition-transform hover:-translate-y-1 hover:-translate-x-1;
-    box-shadow: 4px 4px 0px 0px #00000050;
+    @apply relative font-bold transition-transform hover:-translate-y-1 hover:-translate-x-1;
+    border: 2px solid hsl(43 80% 40%);
+    background: hsl(43 96% 56%);
+    color: hsl(0 0% 0%);
+    box-shadow: 4px 4px 0px 0px hsl(43 80% 40%);
   }
   
   .btn-3d-primary:hover {
-     box-shadow: 4px 4px 0px 0px #000;
+    box-shadow: 6px 6px 0px 0px hsl(43 80% 40%);
   }
 
   .btn-3d-primary:active {
     @apply translate-x-0 translate-y-0;
-    box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px hsl(43 80% 40%);
   }
 
   .card-brutal {
-    @apply border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_#000];
+    @apply p-6;
+    border: 2px solid hsl(43 96% 56%);
+    background: hsl(var(--card));
+    box-shadow: 4px 4px 0px 0px hsl(43 96% 56%);
   }
   
   .input-brutal {
-    @apply border-2 border-black rounded-none px-4 py-3 focus:outline-none focus:ring-0 focus:shadow-[4px_4px_0px_0px_#000] transition-shadow;
+    @apply rounded-none px-4 py-3 focus:outline-none focus:ring-0 transition-shadow bg-transparent;
+    border: 2px solid hsl(43 50% 30%);
+  }
+  
+  .input-brutal:focus {
+    border-color: hsl(43 96% 56%);
+    box-shadow: 4px 4px 0px 0px hsl(43 96% 56%);
+  }
+
+  .logo-3d {
+    filter: drop-shadow(0 0 30px hsl(43 96% 56% / 0.5)) drop-shadow(0 10px 20px hsl(0 0% 0% / 0.3));
+    transform: perspective(1000px) rotateX(5deg);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  
+  .logo-3d:hover {
+    transform: perspective(1000px) rotateX(0deg) scale(1.05);
+    filter: drop-shadow(0 0 40px hsl(43 96% 56% / 0.7)) drop-shadow(0 15px 30px hsl(0 0% 0% / 0.4));
   }
 }
 
