@@ -13,17 +13,19 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   // Session setup for Admin Auth
+  app.set("trust proxy", 1);
   app.use(
     session({
       store: new SessionStore({
         checkPeriod: 86400000, // prune expired entries every 24h
       }),
       secret: process.env.SESSION_SECRET || "sansa-learn-secret",
-      resave: false,
-      saveUninitialized: false,
+      resave: true,
+      saveUninitialized: true,
       cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        secure: process.env.NODE_ENV === "production",
+        secure: false, // Keep false for now as it's behind a proxy
+        sameSite: "lax",
       },
     })
   );
