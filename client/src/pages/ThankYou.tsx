@@ -135,7 +135,7 @@ export default function ThankYou() {
             </li>
             <li className="flex items-start gap-3">
               <span className="bg-black text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">3</span>
-              <span>Report to the center on 15th June at your batch time.</span>
+              <span>Report to the center on 2nd February at your batch time.</span>
             </li>
           </ul>
         </div>

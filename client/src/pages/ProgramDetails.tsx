@@ -5,8 +5,8 @@ import { Clock, MapPin, Calendar, IndianRupee } from "lucide-react";
 
 // Hardcoded Routine Data as per requirements
 export const ROUTINE_DATA = [
-  { class: "CLASS 11th", time: "1:00 PM – 2:00 PM", subjects: "Science", days: "Monday to Saturday" },
-  { class: "CLASS 12th", time: "2:00 PM – 3:00 PM", subjects: "Science", days: "Monday to Saturday" },
+  { class: "CLASS 11th", time: "1:00 PM – 2:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
+  { class: "CLASS 12th", time: "2:00 PM – 3:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
   { class: "CLASS 10th", time: "3:00 PM – 4:00 PM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
   { class: "CLASS 5th", time: "4:00 PM – 5:00 PM", subjects: "Mathematics, English Grammar, Science", days: "Mon-Tue: Math | Wed-Thu: Eng | Fri-Sat: Sci" },
   { class: "CLASS 6th", time: "5:00 PM – 6:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
