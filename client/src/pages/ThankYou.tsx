@@ -97,7 +97,7 @@ export default function ThankYou() {
       ],
       theme: 'grid',
       styles: { fontSize: 11, cellPadding: 5 },
-      columnStyles: { 0: { fontStyle: 'bold', width: 50 } }
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
     });
 
     doc.setFontSize(10);
