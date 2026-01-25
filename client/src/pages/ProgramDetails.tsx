@@ -67,7 +67,7 @@ export default function ProgramDetails() {
               </div>
             </div>
 
-            <div className="card-brutal bg-black text-white border-white dark:bg-white dark:text-black dark:border-black">
+            <div className="card-brutal bg-neutral-900 text-white border-black dark:bg-white dark:text-black dark:border-white">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <MapPin className="w-6 h-6" /> Location & Contact
               </h2>
