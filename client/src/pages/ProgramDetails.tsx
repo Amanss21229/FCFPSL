@@ -67,16 +67,16 @@ export default function ProgramDetails() {
               </div>
             </div>
 
-            <div className="card-brutal bg-neutral-900 text-white border-black dark:bg-white dark:text-black dark:border-white">
+            <div className="card-brutal bg-black text-white border-black dark:bg-white dark:text-black dark:border-white">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <MapPin className="w-6 h-6" /> Location & Contact
               </h2>
               <address className="font-mono not-italic text-lg space-y-2">
-                <p className="font-bold text-xl">SANSA LEARN - Offline Coaching</p>
-                <p>Chandmari Road, Kankarbagh, Patna</p>
-                <p>(Opposite Gali No. 06)</p>
+                <p className="font-bold text-xl text-white dark:text-black">SANSA LEARN - Offline Coaching</p>
+                <p className="text-white dark:text-black">Chandmari Road, Kankarbagh, Patna</p>
+                <p className="text-white dark:text-black">(Opposite Gali No. 06)</p>
                 <div className="mt-6 pt-6 border-t border-white/20 dark:border-black/20">
-                  <p>Contact: 9296820840, 9153021229</p>
+                  <p className="text-white dark:text-black">Contact: 9296820840, 9153021229</p>
                 </div>
               </address>
             </div>
