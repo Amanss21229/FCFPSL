@@ -6,8 +6,9 @@ import { insertRegistrationSchema } from "@shared/schema";
 import { useCreateRegistration } from "@/hooks/use-registrations";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { Loader2 } from "lucide-react";
+import { Loader2, Camera, X } from "lucide-react";
 import type { z } from "zod";
+import { useState } from "react";
 
 type FormData = z.infer<typeof insertRegistrationSchema>;
 
@@ -15,6 +16,7 @@ export default function Register() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const { mutateAsync: register, isPending } = useCreateRegistration();
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(insertRegistrationSchema),
@@ -28,8 +30,36 @@ export default function Register() {
       alternateNumber: "",
       grade: "",
       gender: "",
+      photo: "",
     }
   });
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File too large",
+          description: "Photo must be less than 2MB",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setPhotoPreview(base64);
+        form.setValue("photo", base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removePhoto = () => {
+    setPhotoPreview(null);
+    form.setValue("photo", "");
+  };
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -50,12 +80,47 @@ export default function Register() {
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-black uppercase mb-4 text-foreground">Student Registration</h1>
-            <p className="font-mono text-muted-foreground">Fill out the form below to secure your seat.</p>
+            <p className="font-mono text-muted-foreground">Fill out the form below to secure your seat (Only 20 seats per batch!).</p>
           </div>
 
           <div className="card-brutal">
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               
+              {/* Photo Upload Section */}
+              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-foreground/20 rounded-lg bg-muted/50">
+                <label className="font-bold uppercase text-sm mb-4 text-foreground">Student Photo (Optional)</label>
+                <div className="relative group">
+                  {photoPreview ? (
+                    <div className="relative w-32 h-32">
+                      <img 
+                        src={photoPreview} 
+                        alt="Preview" 
+                        className="w-32 h-32 object-cover border-4 border-foreground rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={removePhoto}
+                        className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground p-1 rounded-full border-2 border-foreground hover:scale-110 transition-transform"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center w-32 h-32 border-4 border-foreground rounded-lg bg-background cursor-pointer hover:bg-muted transition-colors">
+                      <Camera className="w-8 h-8 text-muted-foreground" />
+                      <span className="text-[10px] font-bold uppercase mt-2">Upload</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={handlePhotoChange}
+                      />
+                    </label>
+                  )}
+                </div>
+                <p className="text-[10px] font-mono text-muted-foreground mt-4 uppercase">JPG, PNG allowed. Max 2MB.</p>
+              </div>
+
               {/* Student Details Section */}
               <div>
                 <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">Student Details</h3>
@@ -89,8 +154,6 @@ export default function Register() {
                     <label className="font-bold uppercase text-sm text-foreground">Class (2025-26) *</label>
                     <select {...form.register("grade")} className="w-full input-brutal bg-background text-foreground">
                       <option value="">Select Class</option>
-                      <option value="Class 3rd">Class 3rd</option>
-                      <option value="Class 4th">Class 4th</option>
                       <option value="Class 5th">Class 5th</option>
                       <option value="Class 6th">Class 6th</option>
                       <option value="Class 7th">Class 7th</option>
@@ -205,7 +268,7 @@ export default function Register() {
                     </span>
                   ) : "Submit Registration"}
                 </BrutalButton>
-                <p className="text-center font-mono text-xs text-muted-foreground mt-4">
+                <p className="text-center font-mono text-xs text-muted-foreground mt-4 uppercase">
                   By submitting, you agree to receive program updates via WhatsApp.
                 </p>
               </div>

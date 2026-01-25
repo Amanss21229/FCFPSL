@@ -13,6 +13,7 @@ export const registrations = pgTable("registrations", {
   parentMobileNumber: varchar("parent_mobile_number", { length: 15 }).notNull(),
   alternateNumber: varchar("alternate_number", { length: 15 }),
   address: text("address").notNull(),
+  photo: text("photo"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -23,6 +24,7 @@ export const insertRegistrationSchema = createInsertSchema(registrations).omit({
   whatsappNumber: z.string().min(10, "Valid number required"),
   parentMobileNumber: z.string().min(10, "Valid number required"),
   alternateNumber: z.string().optional(),
+  photo: z.string().optional(),
 });
 
 export type Registration = typeof registrations.$inferSelect;
