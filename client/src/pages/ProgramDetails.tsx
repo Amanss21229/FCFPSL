@@ -67,7 +67,7 @@ export default function ProgramDetails() {
               </div>
             </div>
 
-            <div className="card-brutal bg-foreground text-background border-background">
+            <div className="card-brutal bg-black text-white border-white dark:bg-white dark:text-black dark:border-black">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <MapPin className="w-6 h-6" /> Location & Contact
               </h2>
@@ -75,7 +75,7 @@ export default function ProgramDetails() {
                 <p className="font-bold text-xl">SANSA LEARN - Offline Coaching</p>
                 <p>Chandmari Road, Kankarbagh, Patna</p>
                 <p>(Opposite Gali No. 06)</p>
-                <div className="mt-6 pt-6 border-t border-background/20">
+                <div className="mt-6 pt-6 border-t border-white/20 dark:border-black/20">
                   <p>Contact: 9296820840, 9153021229</p>
                 </div>
               </address>
