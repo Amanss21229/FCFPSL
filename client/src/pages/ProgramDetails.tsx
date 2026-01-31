@@ -70,16 +70,16 @@ export default function ProgramDetails() {
               </div>
             </div>
 
-            <div className="card-brutal bg-black text-white border-black dark:bg-white dark:text-black dark:border-white">
-              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+            <div className="card-brutal !bg-black text-white border-black dark:!bg-white dark:text-black dark:border-white">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-white dark:text-black">
                 <MapPin className="w-6 h-6" /> {t("program.location.title")}
               </h2>
-              <address className="font-mono not-italic text-lg space-y-2">
-                <p className="font-bold text-xl">{t("program.location.center")}</p>
-                <p>{t("program.location.address1")}</p>
-                <p>{t("program.location.address2")}</p>
+              <address className="font-mono not-italic text-lg space-y-2 text-white dark:text-black">
+                <p className="font-bold text-xl text-white dark:text-black">{t("program.location.center")}</p>
+                <p className="text-white dark:text-black">{t("program.location.address1")}</p>
+                <p className="text-white dark:text-black">{t("program.location.address2")}</p>
                 <div className="mt-6 pt-6 border-t border-white/20 dark:border-black/20">
-                  <p>{t("program.location.contact")}: 9296820840, 9153021229</p>
+                  <p className="text-white dark:text-black">{t("program.location.contact")}: 9296820840, 9153021229</p>
                 </div>
               </address>
             </div>
