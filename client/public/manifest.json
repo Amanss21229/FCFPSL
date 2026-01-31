@@ -16,5 +16,15 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "lang": "en",
+  "orientation": "any",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "fullscreen",
+    "minimal-ui"
+  ],
+  "id": "SANAMSONLINE",
+  "description": "Powered By Sansa Learn—"
 }
