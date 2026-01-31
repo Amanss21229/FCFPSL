@@ -93,12 +93,35 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   ) || [];
 
   const handleExport = () => {
-    if (!registrations) return;
+    if (!registrations || registrations.length === 0) {
+      toast({ title: "No data to export", variant: "destructive" });
+      return;
+    }
     
-    const worksheet = XLSX.utils.json_to_sheet(registrations);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
-    XLSX.writeFile(workbook, `Sansa_Registrations_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+    try {
+      const exportData = registrations.map((r: any) => ({
+        "ID": r.id,
+        "Student Name": r.studentName,
+        "Gender": r.gender,
+        "Class": r.grade,
+        "Father Name": r.fatherName,
+        "Mother Name": r.motherName,
+        "WhatsApp Number": r.whatsappNumber,
+        "Parent Mobile": r.parentMobileNumber,
+        "Alternate Number": r.alternateNumber || "N/A",
+        "Address": r.address,
+        "Registration Date": format(new Date(r.createdAt), "yyyy-MM-dd HH:mm"),
+      }));
+      
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
+      XLSX.writeFile(workbook, `Sansa_Registrations_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+      toast({ title: "Excel file downloaded successfully" });
+    } catch (error) {
+      console.error("Export error:", error);
+      toast({ title: "Failed to export", variant: "destructive" });
+    }
   };
 
   const handleDelete = async (id: number) => {

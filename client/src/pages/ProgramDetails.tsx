@@ -6,14 +6,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 // Hardcoded Routine Data as per requirements
 export const ROUTINE_DATA = [
+  { class: "CLASS 10th", time: "7:30 AM – 8:30 AM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
   { class: "CLASS 11th", time: "1:00 PM – 2:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
   { class: "CLASS 12th", time: "2:00 PM – 3:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
-  { class: "CLASS 10th", time: "3:00 PM – 4:00 PM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
+  { class: "CLASS 9th", time: "3:00 PM – 4:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
   { class: "CLASS 5th", time: "4:00 PM – 5:00 PM", subjects: "Mathematics, English Grammar, Science", days: "Mon-Tue: Math | Wed-Thu: Eng | Fri-Sat: Sci" },
   { class: "CLASS 6th", time: "5:00 PM – 6:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
   { class: "CLASS 7th", time: "6:00 PM – 7:00 PM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
   { class: "CLASS 8th", time: "7:00 PM – 8:00 PM", subjects: "Mathematics, English Grammar, Science", days: "Mon-Tue: Math | Wed-Thu: Eng | Fri-Sat: Sci" },
-  { class: "CLASS 9th", time: "8:00 PM – 9:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
 ];
 
 export default function ProgramDetails() {
