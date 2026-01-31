@@ -2,6 +2,7 @@
   "name": "Sansa Learn - Free Concept Foundation Program",
   "short_name": "Sansa Learn FCFP",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a1a1a",
