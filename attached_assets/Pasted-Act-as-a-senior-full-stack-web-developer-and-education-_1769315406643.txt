@@ -67,7 +67,7 @@ CLASS 12th
 Time: 2:00 PM – 3:00 PM  
 Monday to Saturday: Science
 
-CLASS 10th  
+CLASS 9th  
 Time: 3:00 PM – 4:00 PM  
 Monday & Tuesday: Science  
 Wednesday & Thursday: Mathematics  
@@ -97,8 +97,8 @@ Monday & Tuesday: Mathematics
 Wednesday & Thursday: English Grammar  
 Friday & Saturday: Science  
 
-CLASS 9th  
-Time: 8:00 PM – 9:00 PM  
+CLASS 10th  
+Time: 7:30 PM – 8:30 PM  
 Monday & Tuesday: English Grammar  
 Wednesday & Thursday: Science  
 Friday & Saturday: Mathematics  
