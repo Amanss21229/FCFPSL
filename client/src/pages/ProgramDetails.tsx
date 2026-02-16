@@ -46,8 +46,9 @@ export default function ProgramDetails() {
                   <p className="text-sm text-muted-foreground">English Grammar (Class 4-8)</p>
                 </div>
               </div>
-              <div className="mt-8 p-6 bg-golden/10 border-2 border-golden font-bold text-center uppercase">
-                Register now and get 3 days of free demo classes!
+              <div className="mt-8 p-6 bg-golden/10 border-2 border-golden font-bold text-center uppercase space-y-2">
+                <p>Register now and get 3 days of free demo classes!</p>
+                <p className="text-sm text-golden">Note: Weekly tests conducted every Saturday.</p>
               </div>
             </div>
 
