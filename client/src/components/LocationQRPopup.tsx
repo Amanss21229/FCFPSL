@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, MapPin } from "lucide-react";
+import { X, MapPin, MessageCircle } from "lucide-react";
 import qrCodeImage from "@assets/Scan_For_Sansa_Learn_Coaching_Location_1769839600723.png";
 
 export function LocationQRPopup() {
@@ -11,7 +11,6 @@ export function LocationQRPopup() {
     };
 
     const initialTimer = setTimeout(showPopup, 3000);
-
     const intervalTimer = setInterval(showPopup, 10 * 60 * 1000);
 
     return () => {
@@ -33,7 +32,6 @@ export function LocationQRPopup() {
           <button 
             onClick={() => setIsOpen(false)}
             className="p-1 hover:bg-black/10 rounded transition-colors"
-            data-testid="button-close-qr-popup"
           >
             <X className="w-5 h-5 text-black" />
           </button>
@@ -44,7 +42,7 @@ export function LocationQRPopup() {
             Scan to Know the Location
           </p>
           
-          <div className="bg-white p-4 rounded-lg inline-block mb-4">
+          <div className="bg-white p-4 rounded-lg inline-block mb-4 shadow-inner">
             <img 
               src={qrCodeImage} 
               alt="Scan for Sansa Learn Coaching Location" 
@@ -52,18 +50,27 @@ export function LocationQRPopup() {
             />
           </div>
           
-          <p className="text-sm text-muted-foreground font-mono">
+          <p className="text-sm text-muted-foreground font-mono mb-6">
             Chandmari Road, Kankarbagh<br/>
             Patna (Opposite Gali No. 06)
           </p>
           
-          <button
-            onClick={() => setIsOpen(false)}
-            className="mt-4 bg-golden text-black font-bold py-2 px-6 uppercase text-sm hover:bg-golden/80 transition-colors"
-            data-testid="button-got-it"
-          >
-            Got it!
-          </button>
+          <div className="flex flex-col gap-3">
+            <a 
+              href="https://wa.me/919296820840" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full bg-green-500 text-white font-bold py-3 px-6 uppercase text-sm hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-5 h-5" /> Chat / Call Enquiry
+            </a>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-full bg-golden text-black font-bold py-2 px-6 uppercase text-sm hover:bg-golden/80 transition-colors"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>

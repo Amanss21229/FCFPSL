@@ -1,19 +1,13 @@
 import { Layout } from "@/components/Layout";
 import { BrutalButton } from "@/components/BrutalButton";
 import { Link } from "wouter";
-import { Clock, MapPin, Calendar } from "lucide-react";
+import { Clock, MapPin, MessageCircle, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Hardcoded Routine Data as per requirements
 export const ROUTINE_DATA = [
-  { class: "CLASS 10th", time: "7:30 AM – 8:30 AM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
-  { class: "CLASS 11th", time: "1:00 PM – 2:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
-  { class: "CLASS 12th", time: "2:00 PM – 3:00 PM", subjects: "Chemistry", days: "Monday to Saturday" },
-  { class: "CLASS 9th", time: "3:00 PM – 4:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
-  { class: "CLASS 5th", time: "4:00 PM – 5:00 PM", subjects: "Mathematics, English Grammar, Science", days: "Mon-Tue: Math | Wed-Thu: Eng | Fri-Sat: Sci" },
-  { class: "CLASS 6th", time: "5:00 PM – 6:00 PM", subjects: "English Grammar, Science, Mathematics", days: "Mon-Tue: Eng | Wed-Thu: Sci | Fri-Sat: Math" },
-  { class: "CLASS 7th", time: "6:00 PM – 7:00 PM", subjects: "Science, Mathematics, English Grammar", days: "Mon-Tue: Sci | Wed-Thu: Math | Fri-Sat: Eng" },
-  { class: "CLASS 8th", time: "7:00 PM – 8:00 PM", subjects: "Mathematics, English Grammar, Science", days: "Mon-Tue: Math | Wed-Thu: Eng | Fri-Sat: Sci" },
+  { class: "Class 4th - 8th", subjects: "Science, Mathematics, English Grammar", details: "Strong foundation building" },
+  { class: "Class 9th - 10th", subjects: "Science, Mathematics", details: "Board & Foundation focus" },
+  { class: "Class 11th, 12th & Dropper", subjects: "Complete Chemistry", details: "Organic, Inorganic, Physical (NEET/JEE/Boards)" },
 ];
 
 export default function ProgramDetails() {
@@ -23,7 +17,7 @@ export default function ProgramDetails() {
     <Layout>
       <div className="bg-neutral-50 border-b-4 border-black py-16 dark:bg-neutral-900 dark:border-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-black uppercase mb-6 text-foreground">FREE CONCEPT FOUNDATION PROGRAM</h1>
+          <h1 className="text-4xl md:text-6xl font-black uppercase mb-6 text-foreground">Sansa Learn Offline Coaching</h1>
           <p className="font-mono text-xl max-w-2xl mx-auto text-muted-foreground">
             {t("program.hero.subtitle")}
           </p>
@@ -36,37 +30,24 @@ export default function ProgramDetails() {
           <div className="space-y-8">
             <div className="card-brutal">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-foreground">
-                <Calendar className="w-6 h-6" /> {t("program.about")}
+                <User className="w-6 h-6" /> {t("program.guidance")}
               </h2>
-              <ul className="space-y-4 font-mono text-lg text-foreground">
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.duration")}:</span>
-                  <span>15 Days (2 Weeks)</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.dates")}:</span>
-                  <span>2 Feb 2026 - 15 Feb 2026</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.fees")}:</span>
-                  <span className="bg-primary text-primary-foreground px-2 py-0.5 font-bold uppercase">100% FREE</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.eligibility")}:</span>
-                  <span>{t("program.eligibility")}</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.batch")}:</span>
-                  <span className="text-destructive font-bold">{t("program.capacity")}</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="font-bold min-w-[120px]">{t("program.subjects")}:</span>
-                  <span>Maths, Science, English Grammar</span>
-                </li>
-              </ul>
-              <div className="mt-6 p-4 bg-muted border-l-4 border-primary font-mono text-sm">
-                {t("program.guidance.under")}: <strong>Dr. Manisha Kumari</strong> (Head – Sansa Learn)
-                <br />{t("program.teachers")}
+              <div className="space-y-6 font-mono text-lg">
+                <div className="p-4 bg-muted border-l-4 border-golden">
+                  <p className="font-bold">Dr. Manisha Kumari</p>
+                  <p className="text-sm text-muted-foreground">Science (Class 4-10) | Chemistry (Class 11, 12, Dropper)</p>
+                </div>
+                <div className="p-4 bg-muted border-l-4 border-golden">
+                  <p className="font-bold">Aman Kumar</p>
+                  <p className="text-sm text-muted-foreground">Mathematics (Class 4-10)</p>
+                </div>
+                <div className="p-4 bg-muted border-l-4 border-golden">
+                  <p className="font-bold">Nisha Kumari</p>
+                  <p className="text-sm text-muted-foreground">English Grammar (Class 4-8)</p>
+                </div>
+              </div>
+              <div className="mt-8 p-6 bg-golden/10 border-2 border-golden font-bold text-center uppercase">
+                Register now and get 3 days of free demo classes!
               </div>
             </div>
 
@@ -78,8 +59,11 @@ export default function ProgramDetails() {
                 <p className="font-bold text-xl text-white dark:text-black">{t("program.location.center")}</p>
                 <p className="text-white dark:text-black">{t("program.location.address1")}</p>
                 <p className="text-white dark:text-black">{t("program.location.address2")}</p>
-                <div className="mt-6 pt-6 border-t border-white/20 dark:border-black/20">
+                <div className="mt-6 pt-6 border-t border-white/20 dark:border-black/20 flex flex-col gap-4">
                   <p className="text-white dark:text-black">{t("program.location.contact")}: 9296820840, 9153021229</p>
+                  <a href="https://wa.me/919296820840" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 font-bold uppercase hover:bg-green-600 transition-colors">
+                    <MessageCircle className="w-5 h-5" /> WhatsApp Enquiry
+                  </a>
                 </div>
               </address>
             </div>
@@ -104,8 +88,8 @@ export default function ProgramDetails() {
                     {ROUTINE_DATA.map((item, index) => (
                       <tr key={index} className="border-b border-border hover:bg-muted">
                         <td className="p-3 font-bold border-r border-border text-sm">{item.class}</td>
-                        <td className="p-3 border-r border-border text-sm whitespace-nowrap">{item.time}</td>
-                        <td className="p-3 text-xs">{item.days}</td>
+                        <td className="p-3 border-r border-border text-sm">{item.subjects}</td>
+                        <td className="p-3 text-xs">{item.details}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -116,7 +100,7 @@ export default function ProgramDetails() {
             <div className="mt-12 text-center">
               <Link href="/register">
                 <BrutalButton variant="primary" size="lg" className="w-full md:w-auto text-xl py-4 px-12 animate-pulse">
-                  {t("program.cta")}
+                  Register for 3-Day Demo
                 </BrutalButton>
               </Link>
             </div>
