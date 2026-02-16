@@ -29,7 +29,7 @@ export default function ThankYou() {
     enabled: !!id,
   });
 
-  const studentRoutine = ROUTINE_DATA.find(r => r.class === registration?.grade);
+  const studentRoutine = ROUTINE_DATA.find(r => r.class.includes(registration?.grade?.split(' ')[1] || "NONE"));
 
   const generatePDF = async () => {
     const doc = new jsPDF();
@@ -62,12 +62,12 @@ export default function ThankYou() {
       
       doc.setFontSize(9);
       doc.setTextColor(100, 100, 100);
-      doc.text("CONCEPT FOUNDATION", 35, 18);
+      doc.text("OFFLINE COACHING", 35, 18);
       
       doc.setFontSize(11);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(218, 165, 32);
-      doc.text("FREE CONCEPT FOUNDATION PROGRAM", center, 35, { align: "center" });
+      doc.text("ADMISSION CONFIRMATION RECEIPT", center, 35, { align: "center" });
       
       doc.setDrawColor(218, 165, 32);
       doc.setLineWidth(0.5);
@@ -94,21 +94,20 @@ export default function ThankYou() {
 
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
-    const introText = "Congratulations on securing your seat in the Sansa Learn Concept Foundation Program. This 15-day intensive program is designed to strengthen your academic foundations in Mathematics, Science, and English Grammar.";
+    const introText = "Congratulations on securing your 3-day free demo class at Sansa Learn. We are excited to have you join our offline coaching classes.";
     doc.text(doc.splitTextToSize(introText, 170), 20, 80);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
-    doc.text("Program Information:", 20, 105);
+    doc.text("Registration Details:", 20, 105);
     
     autoTable(doc, {
       startY: 110,
       body: [
         ["Registration ID", `#${registration?.id || "N/A"}`],
         ["Student Name", registration?.studentName || "N/A"],
-        ["Class (2025-26)", registration?.grade || "N/A"],
-        ["Batch Duration", "15 Days (2nd Feb - 15th Feb 2026)"],
-        ["Class Start Date", "2nd February 2026"],
+        ["Target Class", registration?.grade || "N/A"],
+        ["Demo Duration", "3 Days Free Trial"],
         ["Location", "Chandmari Road, Kankarbagh Patna (opposite of Gali no. 06)"],
       ],
       theme: 'grid',
@@ -118,18 +117,18 @@ export default function ThankYou() {
 
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("General Information:", 20, (doc as any).lastAutoTable.finalY + 15);
+    doc.text("Important Instructions:", 20, (doc as any).lastAutoTable.finalY + 15);
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    const generalInfo = [
-      "- Please arrive 15 minutes before your scheduled batch time on the first day.",
+    const instructions = [
+      "- Please report to the center at least 10 minutes early.",
       "- Bring this receipt and one passport size photograph.",
-      "- Classes will be held Monday to Saturday.",
-      "- Contact: 9296820840, 9153021229 for any queries.",
+      "- Demo classes are valid for 3 consecutive working days.",
+      "- Contact: 9296820840 for batch timing confirmation.",
     ];
     let yPos = (doc as any).lastAutoTable.finalY + 22;
-    generalInfo.forEach(info => {
+    instructions.forEach(info => {
       doc.text(info, 20, yPos);
       yPos += 7;
     });
@@ -140,39 +139,34 @@ export default function ThankYou() {
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(0, 0, 0);
-    doc.text("REGISTRATION FORM COPY", center, 55, { align: "center" });
+    doc.text("STUDENT DATA COPY", center, 55, { align: "center" });
 
     if (registration) {
+      if (registration.photo) {
+        doc.addImage(registration.photo, 'JPEG', pageWidth - 50, 65, 35, 35);
+        doc.setDrawColor(0, 0, 0);
+        doc.rect(pageWidth - 50, 65, 35, 35);
+      }
+
       autoTable(doc, {
         startY: 65,
+        margin: { right: 60 },
         head: [['Field', 'Information']],
         body: [
-          ['Registration ID', `#${registration.id}`],
-          ['Student Name', registration.studentName || 'N/A'],
+          ['Name', registration.studentName || 'N/A'],
           ['Gender', registration.gender || 'N/A'],
-          ['Class (2025-26)', registration.grade || 'N/A'],
-          ['Father\'s Name', registration.fatherName || 'N/A'],
-          ['Mother\'s Name', registration.motherName || 'N/A'],
-          ['WhatsApp Number', registration.whatsappNumber || 'N/A'],
-          ['Parent Mobile', registration.parentMobileNumber || 'N/A'],
-          ['Alternate Number', registration.alternateNumber || 'N/A'],
-          ['Full Address', registration.address || 'N/A'],
-          ['Registration Date', registration.createdAt ? format(new Date(registration.createdAt), "PPP 'at' p") : 'N/A'],
+          ['Class', registration.grade || 'N/A'],
+          ['Father', registration.fatherName || 'N/A'],
+          ['Mother', registration.motherName || 'N/A'],
+          ['WhatsApp', registration.whatsappNumber || 'N/A'],
+          ['Parent Mob', registration.parentMobileNumber || 'N/A'],
+          ['Address', registration.address || 'N/A'],
+          ['Date', registration.createdAt ? format(new Date(registration.createdAt), "PPP") : 'N/A'],
         ],
         theme: 'striped',
-        headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0], fontStyle: 'bold' },
-        styles: { fontSize: 10, cellPadding: 5 },
-        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
+        headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0] },
+        styles: { fontSize: 10, cellPadding: 5 }
       });
-
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "italic");
-      doc.setTextColor(100, 100, 100);
-      doc.text("This is an official copy of your registration form. Please keep it safe.", center, (doc as any).lastAutoTable.finalY + 15, { align: "center" });
-    } else {
-      doc.setFontSize(12);
-      doc.setTextColor(150, 150, 150);
-      doc.text("Registration data not available.", center, 100, { align: "center" });
     }
 
     doc.addPage();
@@ -180,87 +174,27 @@ export default function ThankYou() {
 
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(0, 0, 0);
-    doc.text("CLASS ROUTINE & DAILY SCHEDULE", center, 55, { align: "center" });
+    doc.text("PROGRAM & SUBJECT INFO", center, 55, { align: "center" });
 
-    if (studentRoutine) {
-      doc.setFontSize(13);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(218, 165, 32);
-      doc.text(`Your Assigned Batch: ${studentRoutine.class}`, 20, 70);
-      
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      doc.setFont("helvetica", "normal");
-      doc.text(`Daily Timing: ${studentRoutine.time}`, 20, 80);
-      doc.text(`Duration: Monday to Saturday`, 20, 88);
+    autoTable(doc, {
+      startY: 70,
+      head: [['Class Group', 'Subjects Offered', 'Focus Area']],
+      body: ROUTINE_DATA.map(r => [r.class, r.subjects, r.details]),
+      theme: 'grid',
+      headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0] },
+      styles: { fontSize: 9, cellPadding: 6 }
+    });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text("Your Weekly Subject Schedule:", 20, 102);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Faculty Members:", 20, (doc as any).lastAutoTable.finalY + 15);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("- Dr. Manisha Kumari: Science (4-10) | Chemistry (11, 12, Dropper)", 20, (doc as any).lastAutoTable.finalY + 25);
+    doc.text("- Aman Kumar: Mathematics (Class 4-10)", 20, (doc as any).lastAutoTable.finalY + 32);
+    doc.text("- Nisha Kumari: English Grammar (Class 4-8)", 20, (doc as any).lastAutoTable.finalY + 39);
 
-      const scheduleData = studentRoutine.days.split('|').map(d => d.trim());
-      autoTable(doc, {
-        startY: 108,
-        head: [['Days', 'Subject']],
-        body: scheduleData.map(schedule => {
-          const parts = schedule.split(':');
-          return [parts[0]?.trim() || schedule, parts[1]?.trim() || 'All Subjects'];
-        }),
-        theme: 'grid',
-        headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0], fontStyle: 'bold' },
-        styles: { fontSize: 10, cellPadding: 6 },
-        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
-      });
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text("Complete Program Schedule (All Batches):", 20, (doc as any).lastAutoTable.finalY + 18);
-
-      autoTable(doc, {
-        startY: (doc as any).lastAutoTable.finalY + 24,
-        head: [['Class', 'Time', 'Subjects', 'Weekly Schedule']],
-        body: ROUTINE_DATA.map(r => [r.class, r.time, r.subjects, r.days]),
-        theme: 'striped',
-        headStyles: { fillColor: [50, 50, 50], textColor: [255, 255, 255] },
-        styles: { fontSize: 8, cellPadding: 4 },
-        columnStyles: { 
-          0: { fontStyle: 'bold', cellWidth: 28 },
-          1: { cellWidth: 35 },
-          2: { cellWidth: 55 },
-          3: { cellWidth: 55 }
-        }
-      });
-    } else {
-      doc.setFontSize(13);
-      doc.setFont("helvetica", "bold");
-      doc.text("Daily Class Schedule:", 20, 70);
-      
-      doc.setFontSize(11);
-      doc.setFont("helvetica", "normal");
-      doc.text("Your class schedule will be available based on your assigned batch.", 20, 82);
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text("Complete Program Schedule (All Batches):", 20, 100);
-
-      autoTable(doc, {
-        startY: 106,
-        head: [['Class', 'Time', 'Subjects', 'Weekly Schedule']],
-        body: ROUTINE_DATA.map(r => [r.class, r.time, r.subjects, r.days]),
-        theme: 'striped',
-        headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0] },
-        styles: { fontSize: 8, cellPadding: 4 },
-        columnStyles: { 
-          0: { fontStyle: 'bold', cellWidth: 28 },
-          1: { cellWidth: 35 },
-          2: { cellWidth: 55 },
-          3: { cellWidth: 55 }
-        }
-      });
-    }
-
-    doc.save(`Sansa-Learn-Receipt-${registration?.studentName || "Student"}.pdf`);
+    doc.save(`Admission-Receipt-${registration?.studentName || "Student"}.pdf`);
   };
 
   return (
@@ -273,26 +207,8 @@ export default function ThankYou() {
           </div>
           <h1 className="text-4xl md:text-5xl font-black uppercase mb-4 text-foreground">Registration Successful!</h1>
           <p className="font-mono text-xl text-muted-foreground max-w-lg mx-auto">
-            Thank you for registering for the Concept Foundation Program. We have reserved your seat.
+            Your 3-day free demo class is booked. We look forward to seeing you at the center.
           </p>
-        </div>
-
-        <div className="card-brutal max-w-lg w-full mb-8 text-left bg-white dark:bg-neutral-800">
-          <h3 className="font-bold uppercase border-b-2 border-black dark:border-white pb-2 mb-4 text-foreground">Next Steps</h3>
-          <ul className="space-y-4 font-mono text-sm text-foreground">
-            <li className="flex items-start gap-3">
-              <span className="bg-black dark:bg-white text-white dark:text-black rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">1</span>
-              <span>Download your registration receipt below.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="bg-black dark:bg-white text-white dark:text-black rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">2</span>
-              <span>Join the WhatsApp group (link sent to your number).</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="bg-black dark:bg-white text-white dark:text-black rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">3</span>
-              <span>Report to the center on 2nd February at your batch time.</span>
-            </li>
-          </ul>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">

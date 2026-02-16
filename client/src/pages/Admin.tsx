@@ -4,11 +4,20 @@ import { useAuth, useRegistrations, useDeleteRegistration } from "@/hooks/use-re
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Trash2, MessageCircle, FileSpreadsheet, LogOut, Search } from "lucide-react";
+import { Loader2, Trash2, MessageCircle, FileSpreadsheet, LogOut, Search, Download } from "lucide-react";
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import logoSrc from "@assets/file_00000000fc9c71f4959f7efd35bf788d_1769314870949.png";
+
+declare module "jspdf" {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+  }
+}
 
 const loginSchema = z.object({
   password: z.string().min(1, "Password required"),
@@ -91,6 +100,105 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     r.studentName.toLowerCase().includes(search.toLowerCase()) ||
     r.whatsappNumber.includes(search)
   ) || [];
+
+  const generateRegistrationPDF = async (reg: any) => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const center = pageWidth / 2;
+
+    let logoBase64: string | null = null;
+    try {
+      const response = await fetch(logoSrc);
+      const blob = await response.blob();
+      logoBase64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+    } catch (e) {
+      console.error("Failed to load logo:", e);
+    }
+
+    const addPremiumBranding = () => {
+      // Background decorative element
+      doc.setDrawColor(218, 165, 32);
+      doc.setLineWidth(1);
+      doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
+      
+      if (logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 15, 15, 25, 25);
+      }
+      
+      doc.setFontSize(24);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(218, 165, 32);
+      doc.text("SANSA LEARN", center, 25, { align: "center" });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text("OFFLINE COACHING CENTER - KANKARBAGH, PATNA", center, 32, { align: "center" });
+      
+      doc.setDrawColor(218, 165, 32);
+      doc.setLineWidth(0.5);
+      doc.line(20, 42, pageWidth - 20, 42);
+
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text("Official Registration Copy - Confidential", center, pageHeight - 15, { align: "center" });
+    };
+
+    addPremiumBranding();
+
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("STUDENT ADMISSION FORM", center, 55, { align: "center" });
+
+    // Photo Box
+    if (reg.photo) {
+      doc.addImage(reg.photo, 'JPEG', pageWidth - 55, 60, 40, 40);
+      doc.setDrawColor(0, 0, 0);
+      doc.rect(pageWidth - 55, 60, 40, 40);
+    } else {
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(pageWidth - 55, 60, 40, 40);
+      doc.setFontSize(8);
+      doc.text("PHOTO", pageWidth - 35, 80, { align: "center" });
+    }
+
+    autoTable(doc, {
+      startY: 110,
+      head: [['CATEGORY', 'STUDENT INFORMATION']],
+      body: [
+        ['REGISTRATION ID', `#${reg.id}`],
+        ['FULL NAME', reg.studentName.toUpperCase()],
+        ['GENDER', reg.gender.toUpperCase()],
+        ['TARGET CLASS', reg.grade.toUpperCase()],
+        ['FATHER\'S NAME', reg.fatherName.toUpperCase()],
+        ['MOTHER\'S NAME', reg.motherName.toUpperCase()],
+        ['WHATSAPP NO.', reg.whatsappNumber],
+        ['PARENT MOBILE', reg.parentMobileNumber],
+        ['ALTERNATE NO.', reg.alternateNumber || "N/A"],
+        ['POSTAL ADDRESS', reg.address.toUpperCase()],
+        ['ADMISSION DATE', format(new Date(reg.createdAt), "PPP")],
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [218, 165, 32], textColor: [0, 0, 0], fontStyle: 'bold' },
+      styles: { fontSize: 10, cellPadding: 6, font: 'helvetica' },
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50, fillColor: [245, 245, 245] } }
+    });
+
+    // Signatures
+    const finalY = (doc as any).lastAutoTable.finalY + 40;
+    doc.line(30, finalY, 80, finalY);
+    doc.text("Parent Signature", 55, finalY + 7, { align: "center" });
+    
+    doc.line(pageWidth - 80, finalY, pageWidth - 30, finalY);
+    doc.text("Center Head", pageWidth - 55, finalY + 7, { align: "center" });
+
+    doc.save(`Sansa_Admission_${reg.studentName.replace(/\s+/g, '_')}_${reg.id}.pdf`);
+  };
 
   const handleExport = () => {
     if (!registrations || registrations.length === 0) {
@@ -227,6 +335,13 @@ Please report to the center on 2nd February at your batch time. Contact: 9296820
                         <td className="p-4">{format(new Date(reg.createdAt), "MMM d, yyyy")}</td>
                         <td className="p-4 text-right">
                         <div className="flex justify-end gap-2">
+                            <button 
+                            onClick={() => generateRegistrationPDF(reg)}
+                            className="p-2 bg-blue-500 text-white border border-black hover:scale-105 transition-transform"
+                            title="Download Premium PDF"
+                            >
+                            <Download className="w-4 h-4" />
+                            </button>
                             <button 
                             onClick={() => sendWhatsapp(reg.whatsappNumber, reg.studentName, reg.id)}
                             className="p-2 bg-green-500 text-white border border-black hover:scale-105 transition-transform"

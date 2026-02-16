@@ -9,10 +9,12 @@ import { useLocation } from "wouter";
 import { Loader2, Camera, X } from "lucide-react";
 import type { z } from "zod";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type FormData = z.infer<typeof insertRegistrationSchema>;
 
 export default function Register() {
+  const { t } = useLanguage();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const { mutateAsync: register, isPending } = useCreateRegistration();
@@ -79,8 +81,8 @@ export default function Register() {
       <div className="min-h-screen bg-secondary py-12">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-black uppercase mb-4 text-foreground">Student Registration</h1>
-            <p className="font-mono text-muted-foreground">Fill out the form below to secure your seat (Only 20 seats per batch!).</p>
+            <h1 className="text-4xl md:text-5xl font-black uppercase mb-4 text-foreground">{t("register.title")}</h1>
+            <p className="font-mono text-muted-foreground">{t("register.subtitle")}</p>
           </div>
 
           <div className="card-brutal">
@@ -88,7 +90,7 @@ export default function Register() {
               
               {/* Photo Upload Section */}
               <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-foreground/20 rounded-lg bg-muted/50">
-                <label className="font-bold uppercase text-sm mb-4 text-foreground">Student Photo (Optional)</label>
+                <label className="font-bold uppercase text-sm mb-4 text-foreground">{t("register.photo")}</label>
                 <div className="relative group">
                   {photoPreview ? (
                     <div className="relative w-32 h-32">
@@ -118,15 +120,15 @@ export default function Register() {
                     </label>
                   )}
                 </div>
-                <p className="text-[10px] font-mono text-muted-foreground mt-4 uppercase">JPG, PNG allowed. Max 2MB.</p>
+                <p className="text-[10px] font-mono text-muted-foreground mt-4 uppercase">{t("register.photo.hint")}</p>
               </div>
 
               {/* Student Details Section */}
               <div>
-                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">Student Details</h3>
+                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">{t("register.details.student")}</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Full Name *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.studentName")} *</label>
                     <input 
                       {...form.register("studentName")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -138,12 +140,12 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Gender *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.gender")} *</label>
                     <select {...form.register("gender")} className="w-full input-brutal bg-background text-foreground">
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="">{t("register.gender.placeholder")}</option>
+                      <option value="Male">{t("register.gender.male")}</option>
+                      <option value="Female">{t("register.gender.female")}</option>
+                      <option value="Other">{t("register.gender.other")}</option>
                     </select>
                     {form.formState.errors.gender && (
                       <p className="text-red-500 text-xs font-mono">{form.formState.errors.gender.message}</p>
@@ -151,9 +153,9 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Class (2025-26) *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.class")} *</label>
                     <select {...form.register("grade")} className="w-full input-brutal bg-background text-foreground">
-                      <option value="">Select Class</option>
+                      <option value="">{t("register.class.placeholder")}</option>
                       <option value="Class 4th">Class 4th</option>
                       <option value="Class 5th">Class 5th</option>
                       <option value="Class 6th">Class 6th</option>
@@ -174,10 +176,10 @@ export default function Register() {
 
               {/* Parent Details Section */}
               <div>
-                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">Parent Details</h3>
+                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">{t("register.details.parent")}</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Father's Name *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.fatherName")} *</label>
                     <input 
                       {...form.register("fatherName")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -189,7 +191,7 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Mother's Name *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.motherName")} *</label>
                     <input 
                       {...form.register("motherName")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -204,10 +206,10 @@ export default function Register() {
 
               {/* Contact Details Section */}
               <div>
-                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">Contact Info</h3>
+                <h3 className="text-xl font-bold uppercase border-b-2 border-golden pb-2 mb-6 text-foreground">{t("register.details.contact")}</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Parent WhatsApp Number *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.whatsapp")} *</label>
                     <input 
                       {...form.register("whatsappNumber")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -220,7 +222,7 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Parent Mobile Number *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.whatsapp")} *</label>
                     <input 
                       {...form.register("parentMobileNumber")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -233,7 +235,7 @@ export default function Register() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Alternate Number</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.alternate")}</label>
                     <input 
                       {...form.register("alternateNumber")}
                       className="w-full input-brutal bg-background text-foreground" 
@@ -243,7 +245,7 @@ export default function Register() {
                   </div>
 
                   <div className="md:col-span-2 space-y-2">
-                    <label className="font-bold uppercase text-sm text-foreground">Full Address *</label>
+                    <label className="font-bold uppercase text-sm text-foreground">{t("register.address")} *</label>
                     <textarea 
                       {...form.register("address")}
                       className="w-full input-brutal bg-background text-foreground min-h-[100px]" 
@@ -268,10 +270,10 @@ export default function Register() {
                     <span className="flex items-center gap-2">
                       <Loader2 className="animate-spin" /> Processing...
                     </span>
-                  ) : "Submit Registration"}
+                  ) : t("register.submit")}
                 </BrutalButton>
                 <p className="text-center font-mono text-xs text-muted-foreground mt-4 uppercase">
-                  By submitting, you agree to receive program updates via WhatsApp.
+                  {t("register.footer.note")}
                 </p>
               </div>
 
