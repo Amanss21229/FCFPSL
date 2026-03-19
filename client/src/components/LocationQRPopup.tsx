@@ -10,7 +10,7 @@ export function LocationQRPopup() {
       setIsOpen(true);
     };
 
-    const initialTimer = setTimeout(showPopup, 3000);
+    const initialTimer = setTimeout(showPopup, 15000);
     const intervalTimer = setInterval(showPopup, 10 * 60 * 1000);
 
     return () => {
