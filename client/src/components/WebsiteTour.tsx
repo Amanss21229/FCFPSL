@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { X, ChevronRight, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const STEP_DURATION = 5000;
 const PADDING = 10;
 
 interface TourStep {
@@ -20,8 +19,8 @@ const tourSteps: TourStep[] = [
     icon: "🎓",
     titleEn: "Welcome to Sansa Learn",
     titleHi: "सांसा लर्न में आपका स्वागत है",
-    descEn: "Patna's trusted offline coaching for Class 4th–12th, NEET & JEE. Let us show you around in 30 seconds!",
-    descHi: "पटना की विश्वसनीय ऑफलाइन कोचिंग। 30 सेकंड में वेबसाइट देखें — क्या-क्या मिलेगा यहाँ!",
+    descEn: "Patna's trusted offline coaching for Class 4th–12th, NEET & JEE. Let us show you around!",
+    descHi: "पटना की विश्वसनीय ऑफलाइन कोचिंग। आइए, वेबसाइट के सभी फीचर जानें!",
   },
   {
     target: "[data-testid='link-home']",
@@ -74,7 +73,7 @@ interface Rect {
 
 function getCardStyle(targetRect: Rect | null): React.CSSProperties {
   const CARD_W = 320;
-  const CARD_H = 230;
+  const CARD_H = 220;
 
   if (!targetRect) {
     return {
@@ -118,15 +117,10 @@ function PostTourPopup({ language, onClose }: { language: string; onClose: () =>
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    if (visible) {
-      const t = setTimeout(() => {
-        setVisible(false);
-        setTimeout(onClose, 400);
-      }, 6000);
-      return () => clearTimeout(t);
-    }
-  }, [visible, onClose]);
+  const handleClose = () => {
+    setVisible(false);
+    setTimeout(onClose, 300);
+  };
 
   if (!visible) return null;
 
@@ -134,14 +128,13 @@ function PostTourPopup({ language, onClose }: { language: string; onClose: () =>
     <div
       className="fixed inset-0 flex items-center justify-center"
       style={{ zIndex: 9995, background: "rgba(0,0,0,0.55)" }}
-      onClick={() => { setVisible(false); setTimeout(onClose, 400); }}
+      onClick={handleClose}
     >
       <div
         className="bg-white dark:bg-neutral-900 border-2 border-[#D4AF37] shadow-2xl rounded-lg overflow-hidden mx-4"
         style={{ maxWidth: 360, width: "100%" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Gold header */}
         <div className="bg-[#D4AF37] px-5 py-3 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-black" />
           <span className="font-black font-mono text-xs uppercase tracking-widest text-black">
@@ -149,7 +142,6 @@ function PostTourPopup({ language, onClose }: { language: string; onClose: () =>
           </span>
         </div>
 
-        {/* Content */}
         <div className="px-6 py-5 text-center">
           <div className="text-4xl mb-3">🎉</div>
           <h3 className="font-black text-lg uppercase tracking-wide text-[#D4AF37] mb-2">
@@ -170,7 +162,7 @@ function PostTourPopup({ language, onClose }: { language: string; onClose: () =>
               {language === "en" ? "Register Free" : "मुफ्त रजिस्टर करें"}
             </a>
             <button
-              onClick={() => { setVisible(false); setTimeout(onClose, 400); }}
+              onClick={handleClose}
               className="text-xs font-mono text-muted-foreground hover:text-foreground underline transition-colors"
               data-testid="popup-close-button"
             >
@@ -179,7 +171,6 @@ function PostTourPopup({ language, onClose }: { language: string; onClose: () =>
           </div>
         </div>
 
-        {/* Thin gold bottom border */}
         <div className="h-1 bg-[#D4AF37]" />
       </div>
     </div>
@@ -191,18 +182,13 @@ export function WebsiteTour() {
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(false);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
-  const [progress, setProgress] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const { language } = useLanguage();
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const current = tourSteps[step];
   const isLast = step === tourSteps.length - 1;
 
   useEffect(() => {
-    const alreadySeen = localStorage.getItem("sansa-tour-seen");
-    if (alreadySeen) return;
-
     const t = setTimeout(() => {
       setStarted(true);
       setVisible(true);
@@ -222,41 +208,17 @@ export function WebsiteTour() {
     }
   }, [step, visible, started, current.target]);
 
-  useEffect(() => {
-    if (!visible || !started) return;
-    setProgress(0);
-    let count = 0;
-    const totalTicks = STEP_DURATION / 50;
-
-    timerRef.current = setInterval(() => {
-      count++;
-      setProgress((count / totalTicks) * 100);
-      if (count >= totalTicks) {
-        clearInterval(timerRef.current!);
-        if (isLast) endTour();
-        else setStep((s) => s + 1);
-      }
-    }, 50);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [step, visible, started, isLast]);
-
   const endTour = () => {
     setVisible(false);
-    localStorage.setItem("sansa-tour-seen", "1");
     setShowPopup(true);
   };
 
   const handleNext = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
     if (isLast) endTour();
     else setStep((s) => s + 1);
   };
 
   const handleSkip = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
     endTour();
   };
 
@@ -272,7 +234,6 @@ export function WebsiteTour() {
 
       {visible && (
         <>
-          {/* Full-screen backdrop — only for welcome (no target) step */}
           {!targetRect && (
             <div
               className="fixed inset-0 pointer-events-none"
@@ -280,7 +241,6 @@ export function WebsiteTour() {
             />
           )}
 
-          {/* Spotlight — shown only when a target element exists */}
           {targetRect && (
             <div
               className="fixed pointer-events-none"
@@ -297,10 +257,8 @@ export function WebsiteTour() {
             />
           )}
 
-          {/* Tour Card */}
           <div style={cardStyle} className="pointer-events-auto">
             <div className="bg-white dark:bg-neutral-900 border-2 border-[#D4AF37] shadow-2xl rounded-lg overflow-hidden">
-              {/* Gold header bar */}
               <div className="bg-[#D4AF37] px-4 py-2 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-black" />
@@ -323,7 +281,6 @@ export function WebsiteTour() {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="px-5 py-4">
                 <div className="flex items-start gap-3 mb-4">
                   <span className="text-2xl leading-none mt-0.5">{current.icon}</span>
@@ -337,8 +294,7 @@ export function WebsiteTour() {
                   </div>
                 </div>
 
-                {/* Step dots */}
-                <div className="flex items-center gap-1 mb-3">
+                <div className="flex items-center gap-1 mb-4">
                   {tourSteps.map((_, i) => (
                     <span
                       key={i}
@@ -351,7 +307,6 @@ export function WebsiteTour() {
                   ))}
                 </div>
 
-                {/* Actions */}
                 <div className="flex items-center justify-between">
                   <button
                     onClick={handleSkip}
@@ -366,23 +321,11 @@ export function WebsiteTour() {
                     data-testid="button-tour-next"
                   >
                     {isLast
-                      ? language === "en"
-                        ? "Finish"
-                        : "समाप्त"
-                      : language === "en"
-                      ? "Next"
-                      : "आगे"}
+                      ? language === "en" ? "Finish" : "समाप्त"
+                      : language === "en" ? "Next" : "आगे"}
                     {!isLast && <ChevronRight className="w-4 h-4" />}
                   </button>
                 </div>
-              </div>
-
-              {/* Auto-advance progress bar */}
-              <div className="h-1 bg-neutral-200 dark:bg-neutral-700">
-                <div
-                  className="h-1 bg-[#D4AF37]"
-                  style={{ width: `${progress}%`, transition: "width 50ms linear" }}
-                />
               </div>
             </div>
           </div>
