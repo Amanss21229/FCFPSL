@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LocationQRPopup } from "@/components/LocationQRPopup";
+import { WebsiteTour } from "@/components/WebsiteTour";
 
 import Landing from "@/pages/Landing";
 import ProgramDetails from "@/pages/ProgramDetails";
@@ -36,6 +37,7 @@ function App() {
             <Toaster />
             <Router />
             <LocationQRPopup />
+            <WebsiteTour />
           </TooltipProvider>
         </LanguageProvider>
       </ThemeProvider>
