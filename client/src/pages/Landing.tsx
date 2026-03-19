@@ -72,6 +72,35 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Session 2026-27 Admission Strip */}
+      <section className="bg-[#D4AF37] border-b-2 border-black py-5">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-8">
+              <div className="text-center">
+                <p className="font-black text-black text-xs uppercase tracking-widest">
+                  {t("admission.badge")}
+                </p>
+              </div>
+              <div className="hidden md:block w-px h-8 bg-black/30" />
+              <div className="flex items-center gap-2">
+                <span className="bg-black text-[#D4AF37] font-black font-mono text-xs uppercase px-3 py-1 tracking-widest">
+                  {t("admission.free")}
+                </span>
+                <span className="font-mono font-bold text-black text-xs uppercase">
+                  {t("admission.classes.start")}
+                </span>
+              </div>
+            </div>
+            <Link href="/register">
+              <span className="inline-block bg-black text-[#D4AF37] font-black font-mono text-xs uppercase px-6 py-2 tracking-widest hover:bg-neutral-800 transition-colors">
+                {t("admission.seats")} →
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
@@ -98,7 +127,21 @@ export default function Landing() {
       {/* Call to Action */}
       <section className="py-24 border-t-2 border-golden bg-black text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-black mb-8 uppercase text-golden">{t("cta.title")}</h2>
+          <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37] px-4 py-1.5 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+            <span className="font-mono font-bold text-[#D4AF37] text-xs uppercase tracking-widest">
+              {t("admission.badge")}
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black mb-4 uppercase text-golden">{t("cta.title")}</h2>
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <span className="bg-[#D4AF37] text-black font-black font-mono text-sm uppercase px-4 py-1.5 tracking-widest">
+              {t("admission.free")}
+            </span>
+            <span className="border-2 border-[#D4AF37] text-[#D4AF37] font-mono font-bold text-sm uppercase px-4 py-1.5">
+              {t("admission.classes.start")}
+            </span>
+          </div>
           <p className="text-lg font-mono mb-12 max-w-2xl mx-auto opacity-80">
             {t("cta.subtitle")}
           </p>

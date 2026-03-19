@@ -15,6 +15,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col font-body bg-background text-foreground">
+      {/* Announcement Bar */}
+      {!isAdmin && (
+        <div className="bg-black text-[#D4AF37] overflow-hidden py-2 border-b-2 border-[#D4AF37]">
+          <div
+            className="whitespace-nowrap font-mono font-bold text-xs uppercase tracking-wider"
+            style={{ animation: "marquee 28s linear infinite" }}
+          >
+            <span className="inline-block px-8">{t("announcement.text")}</span>
+            <span className="inline-block px-8">{t("announcement.text")}</span>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="border-b-2 border-golden sticky top-0 z-50 bg-background">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4">

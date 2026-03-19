@@ -80,6 +80,28 @@ export default function Register() {
     <Layout>
       <div className="min-h-screen bg-secondary py-12">
         <div className="container mx-auto px-4 max-w-3xl">
+
+          {/* Session 2026-27 Motivation Banner */}
+          <div className="bg-black border-2 border-[#D4AF37] rounded-lg overflow-hidden mb-8">
+            <div className="bg-[#D4AF37] px-5 py-2 flex items-center gap-2">
+              <span className="font-black font-mono text-xs uppercase tracking-widest text-black">🎉 {t("admission.badge")}</span>
+            </div>
+            <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="space-y-1">
+                <p className="text-[#D4AF37] font-black font-mono text-sm uppercase">
+                  {t("admission.free")} — {t("admission.classes.start")}
+                </p>
+                <p className="text-white font-mono text-xs opacity-80">
+                  {t("admission.seats")}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-green-400 font-mono font-bold text-xs uppercase">Admission Live</span>
+              </div>
+            </div>
+          </div>
+
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-black uppercase mb-4 text-foreground">{t("register.title")}</h1>
             <p className="font-mono text-muted-foreground">{t("register.subtitle")}</p>

@@ -15,6 +15,23 @@ export default function ProgramDetails() {
 
   return (
     <Layout>
+      {/* Session 2026-27 Admission Banner */}
+      <div className="bg-black py-4 border-b-2 border-[#D4AF37]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-center">
+            <span className="bg-[#D4AF37] text-black font-black font-mono text-xs uppercase px-4 py-1.5 tracking-widest">
+              {t("admission.badge")}
+            </span>
+            <span className="text-white font-mono font-bold text-sm">
+              {t("admission.classes.start")}
+            </span>
+            <span className="text-[#D4AF37] font-black font-mono text-sm uppercase">
+              {t("admission.free")}
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-neutral-50 border-b-4 border-black py-16 dark:bg-neutral-900 dark:border-white">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-black uppercase mb-6 text-foreground">Sansa Learn Offline Coaching</h1>
