@@ -1,0 +1,297 @@
+import { useState, useEffect, useRef } from "react";
+import { X, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const STEP_DURATION = 5000;
+const PADDING = 10;
+
+interface TourStep {
+  target: string | null;
+  icon: string;
+  titleEn: string;
+  titleHi: string;
+  descEn: string;
+  descHi: string;
+}
+
+const tourSteps: TourStep[] = [
+  {
+    target: null,
+    icon: "🎓",
+    titleEn: "Welcome to Sansa Learn",
+    titleHi: "सांसा लर्न में आपका स्वागत है",
+    descEn: "Patna's trusted offline coaching for Class 4th–12th, NEET & JEE. Let us show you around in 30 seconds!",
+    descHi: "पटना की विश्वसनीय ऑफलाइन कोचिंग। 30 सेकंड में वेबसाइट देखें — क्या-क्या मिलेगा यहाँ!",
+  },
+  {
+    target: "[data-testid='button-language-toggle']",
+    icon: "🌐",
+    titleEn: "Language Toggle",
+    titleHi: "भाषा बदलें",
+    descEn: "Switch between English and Hindi anytime using this button.",
+    descHi: "इस बटन से कभी भी अंग्रेजी और हिंदी के बीच स्विच करें।",
+  },
+  {
+    target: "[data-testid='button-theme-toggle']",
+    icon: "🌙",
+    titleEn: "Dark / Light Mode",
+    titleHi: "डार्क / लाइट मोड",
+    descEn: "Toggle between light and dark theme for a comfortable reading experience.",
+    descHi: "आरामदायक पढ़ने के लिए लाइट और डार्क थीम के बीच स्विच करें।",
+  },
+  {
+    target: "[data-testid='link-home']",
+    icon: "🏠",
+    titleEn: "Home",
+    titleHi: "होम",
+    descEn: "Return to the main page anytime. Learn about our coaching, features, and more.",
+    descHi: "कभी भी मुख्य पेज पर वापस जाएं। हमारी कोचिंग और सुविधाओं के बारे में जानें।",
+  },
+  {
+    target: "[data-testid='link-programs']",
+    icon: "📚",
+    titleEn: "Programs",
+    titleHi: "प्रोग्राम",
+    descEn: "Explore all our courses, subjects, batch details, and faculty information.",
+    descHi: "हमारे सभी कोर्स, विषय, बैच विवरण और फैकल्टी जानकारी देखें।",
+  },
+  {
+    target: "[data-testid='link-register']",
+    icon: "✍️",
+    titleEn: "Register Now",
+    titleHi: "रजिस्टर करें",
+    descEn: "Book your FREE 3-day demo class. Fill the form and we'll contact you soon!",
+    descHi: "मुफ्त 3-दिवसीय डेमो क्लास बुक करें। फॉर्म भरें और हम जल्द संपर्क करेंगे!",
+  },
+];
+
+interface Rect {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+function getCardStyle(targetRect: Rect | null): React.CSSProperties {
+  const CARD_W = 320;
+  const CARD_H = 210;
+
+  if (!targetRect) {
+    return {
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: CARD_W,
+      zIndex: 9999,
+    };
+  }
+
+  const vh = window.innerHeight;
+  const vw = window.innerWidth;
+  const spaceBelow = vh - (targetRect.top + targetRect.height + PADDING);
+
+  let top: number;
+  if (spaceBelow >= CARD_H + 20) {
+    top = targetRect.top + targetRect.height + PADDING + 10;
+  } else {
+    top = Math.max(10, targetRect.top - CARD_H - PADDING - 10);
+  }
+
+  let left = targetRect.left + targetRect.width / 2 - CARD_W / 2;
+  left = Math.max(16, Math.min(left, vw - CARD_W - 16));
+
+  return {
+    position: "fixed",
+    top,
+    left,
+    width: CARD_W,
+    zIndex: 9999,
+  };
+}
+
+export function WebsiteTour({ onTourEnd }: { onTourEnd: () => void }) {
+  const [step, setStep] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [targetRect, setTargetRect] = useState<Rect | null>(null);
+  const [progress, setProgress] = useState(0);
+  const { language } = useLanguage();
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const current = tourSteps[step];
+  const isLast = step === tourSteps.length - 1;
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 2000);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!visible || !current.target) {
+      setTargetRect(null);
+      return;
+    }
+    const el = document.querySelector(current.target) as HTMLElement | null;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      setTargetRect({ top: r.top, left: r.left, width: r.width, height: r.height });
+    }
+  }, [step, visible, current.target]);
+
+  useEffect(() => {
+    if (!visible) return;
+    setProgress(0);
+    let count = 0;
+    const totalTicks = STEP_DURATION / 50;
+
+    timerRef.current = setInterval(() => {
+      count++;
+      setProgress((count / totalTicks) * 100);
+      if (count >= totalTicks) {
+        clearInterval(timerRef.current!);
+        if (isLast) endTour();
+        else setStep((s) => s + 1);
+      }
+    }, 50);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [step, visible, isLast]);
+
+  const endTour = () => {
+    setVisible(false);
+    onTourEnd();
+  };
+
+  const handleNext = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (isLast) endTour();
+    else setStep((s) => s + 1);
+  };
+
+  const handleSkip = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    endTour();
+  };
+
+  if (!visible) return null;
+
+  const cardStyle = getCardStyle(targetRect);
+
+  return (
+    <>
+      {/* Full-screen backdrop — only for welcome (no target) step */}
+      {!targetRect && (
+        <div
+          className="fixed inset-0 pointer-events-none"
+          style={{ background: "rgba(0,0,0,0.68)", zIndex: 9990 }}
+        />
+      )}
+
+      {/* Spotlight — shown only when a target element exists */}
+      {targetRect && (
+        <div
+          className="fixed pointer-events-none"
+          style={{
+            top: targetRect.top - PADDING,
+            left: targetRect.left - PADDING,
+            width: targetRect.width + PADDING * 2,
+            height: targetRect.height + PADDING * 2,
+            boxShadow: "0 0 0 9999px rgba(0,0,0,0.68)",
+            border: "2px solid #D4AF37",
+            borderRadius: 6,
+            zIndex: 9991,
+          }}
+        />
+      )}
+
+      {/* Tour Card */}
+      <div style={cardStyle} className="pointer-events-auto">
+        <div className="bg-white dark:bg-neutral-900 border-2 border-[#D4AF37] shadow-2xl rounded-lg overflow-hidden">
+          {/* Header bar */}
+          <div className="bg-[#D4AF37] px-4 py-2 flex items-center justify-between">
+            <span className="font-black font-mono text-xs uppercase tracking-widest text-black">
+              Sansa Learn — Tour
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs font-bold text-black">
+                {step + 1} / {tourSteps.length}
+              </span>
+              <button
+                onClick={handleSkip}
+                className="p-0.5 hover:bg-black/10 rounded transition-colors"
+                data-testid="button-tour-close"
+                title="Skip Tour"
+              >
+                <X className="w-4 h-4 text-black" />
+              </button>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="px-5 py-4">
+            <div className="flex items-start gap-3 mb-4">
+              <span className="text-2xl leading-none mt-0.5">{current.icon}</span>
+              <div>
+                <h3 className="font-black text-sm uppercase tracking-wide text-[#D4AF37] leading-snug">
+                  {language === "en" ? current.titleEn : current.titleHi}
+                </h3>
+                <p className="text-sm text-foreground dark:text-neutral-300 mt-1 leading-relaxed">
+                  {language === "en" ? current.descEn : current.descHi}
+                </p>
+              </div>
+            </div>
+
+            {/* Step dots */}
+            <div className="flex items-center gap-1 mb-3">
+              {tourSteps.map((_, i) => (
+                <span
+                  key={i}
+                  className="block h-1.5 rounded-full transition-all duration-300"
+                  style={{
+                    width: i === step ? 20 : 6,
+                    background: i === step ? "#D4AF37" : "#D4AF3740",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between">
+              <button
+                onClick={handleSkip}
+                className="text-xs font-mono text-muted-foreground hover:text-foreground underline transition-colors"
+                data-testid="button-tour-skip"
+              >
+                {language === "en" ? "Skip Tour" : "छोड़ें"}
+              </button>
+              <button
+                onClick={handleNext}
+                className="bg-[#D4AF37] text-black font-bold text-xs uppercase px-4 py-1.5 flex items-center gap-1 hover:bg-[#c9a227] transition-colors rounded-sm"
+                data-testid="button-tour-next"
+              >
+                {isLast
+                  ? language === "en"
+                    ? "Finish"
+                    : "समाप्त"
+                  : language === "en"
+                  ? "Next"
+                  : "आगे"}
+                {!isLast && <ChevronRight className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Auto-advance progress bar */}
+          <div className="h-1 bg-neutral-200 dark:bg-neutral-700">
+            <div
+              className="h-1 bg-[#D4AF37]"
+              style={{ width: `${progress}%`, transition: "width 50ms linear" }}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

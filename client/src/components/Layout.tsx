@@ -35,13 +35,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <nav className="hidden md:flex items-center gap-6">
             {!isAdmin ? (
               <>
-                <Link href="/" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/" && "text-golden")}>
+                <Link href="/" data-testid="link-home" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/" && "text-golden")}>
                   {t("nav.home")}
                 </Link>
-                <Link href="/program" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/program" && "text-golden")}>
+                <Link href="/program" data-testid="link-programs" className={cn("text-base font-bold uppercase hover:text-golden transition-colors", location === "/program" && "text-golden")}>
                   {t("nav.program")}
                 </Link>
-                <Link href="/register">
+                <Link href="/register" data-testid="link-register">
                   <span className="btn-3d-primary px-5 py-2 uppercase text-sm">
                     {t("nav.register")}
                   </span>
