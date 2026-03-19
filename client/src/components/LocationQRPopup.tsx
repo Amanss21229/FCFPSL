@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, MapPin, MessageCircle } from "lucide-react";
+import { X, MapPin, MessageCircle, Navigation } from "lucide-react";
 import qrCodeImage from "@assets/Scan_For_Sansa_Learn_Coaching_Location_1769839600723.png";
 
 export function LocationQRPopup() {
@@ -63,6 +63,14 @@ export function LocationQRPopup() {
               className="w-full bg-green-500 text-white font-bold py-3 px-6 uppercase text-sm hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-5 h-5" /> Chat / Call Enquiry
+            </a>
+            <a
+              href="https://maps.app.goo.gl/2TLnVpjMRM3fTXBCA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-blue-600 text-white font-bold py-3 px-6 uppercase text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <Navigation className="w-5 h-5" /> Open in Google Maps
             </a>
             <button
               onClick={() => setIsOpen(false)}
