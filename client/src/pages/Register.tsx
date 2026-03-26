@@ -235,7 +235,7 @@ export default function Register() {
                     <input 
                       {...form.register("whatsappNumber")}
                       className="w-full input-brutal bg-background text-foreground" 
-                      placeholder="9876543210"
+                      placeholder="9296820840"
                       type="tel"
                     />
                     {form.formState.errors.whatsappNumber && (
@@ -248,7 +248,7 @@ export default function Register() {
                     <input 
                       {...form.register("parentMobileNumber")}
                       className="w-full input-brutal bg-background text-foreground" 
-                      placeholder="9876543210"
+                      placeholder="9153021229"
                       type="tel"
                     />
                     {form.formState.errors.parentMobileNumber && (
